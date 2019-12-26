@@ -1,3 +1,2 @@
 ﻿  Source.cpp
-C:\Users\amran\source\repos\Software_Project\Source.cpp(54,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  Software_Project.vcxproj -> C:\Users\amran\source\repos\Software_Project\Debug\Software_Project.exe
+  Software_Project.vcxproj -> C:\Users\Lenovo\Desktop\oop project\Restaurant-Management-System\Software_Project\Debug\Software_Project.exe

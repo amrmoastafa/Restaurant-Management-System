@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sqlite3.h>
+
+
 using namespace std;
 
 class Item {
@@ -236,9 +240,17 @@ public:
 
 class Credit : private Payment
 {
+public:
+	bool checkCardValidity(string cardID, string pw)
+	{
+
+	}
 
 	bool checkCharge(float price, float charge) 
 	{
+		ifstream readBalance("visa.txt");
+
+		/*The card info will contain id no., password, balance(Charge)*/
 		
 		/* An object must be instantiated from credit class to get its price using the getPrice function to use the price in this current function
 		like so :
@@ -270,3 +282,33 @@ class Cash : private Payment
 
 
 };
+
+void bankSimulation()
+{
+	/*initializing some credit card info*/
+	ofstream balance("visa.txt",ios::app);
+	string card1_No = "4024007141525864";
+	string card1_pw = "dina";
+
+	string card2_No = "4532295627154748";
+	string card2_pw = "dinadina";
+
+	string card3_No = "4929230781795532";
+	string card3_pw = "dinadinadina";
+
+	balance << card1_No << " " << card1_pw << endl;
+	cout << card1_No << " " << card1_pw << endl;
+
+	balance << card2_No << " " << card2_pw << endl;
+	cout << card2_No << " " << card2_pw << endl;
+	
+	balance << card3_No << " " << card3_pw << endl;
+	cout << card3_No << " " << card3_pw << endl;
+	balance.close();
+}
+
+
+int main() {
+	bankSimulation();
+	return 0;
+}
