@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <sqlite3.h>
 
 
 using namespace std;
@@ -289,20 +288,23 @@ void bankSimulation()
 	ofstream balance("visa.txt",ios::app);
 	string card1_No = "4024007141525864";
 	string card1_pw = "dina";
+	int card1_balance = 100;
 
 	string card2_No = "4532295627154748";
 	string card2_pw = "dinadina";
+	int card2_balance = 1;
 
 	string card3_No = "4929230781795532";
 	string card3_pw = "dinadinadina";
+	int card3_balance = 200;
 
-	balance << card1_No << " " << card1_pw << endl;
+	balance << card1_No << " " << card1_pw << " " << card1_balance << endl;
 	cout << card1_No << " " << card1_pw << endl;
 
-	balance << card2_No << " " << card2_pw << endl;
+	balance << card2_No << " " << card2_pw << " " << card2_balance << endl;
 	cout << card2_No << " " << card2_pw << endl;
 	
-	balance << card3_No << " " << card3_pw << endl;
+	balance << card3_No << " " << card3_pw << " " << card3_balance << endl;
 	cout << card3_No << " " << card3_pw << endl;
 	balance.close();
 }
