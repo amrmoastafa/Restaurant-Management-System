@@ -209,7 +209,7 @@ public:
 
 /*Payment class and its inheritance*/
 
-class Payment 
+class Payment
 {
 
 private:
@@ -217,46 +217,99 @@ private:
 	bool paymentStatus;
 
 public:
-	void setPaymentStatus(bool ps) 
+	void setPaymentStatus(bool ps)
 	{
 		paymentStatus = ps;
 	}
 
-	bool  getPaymentStatus() 
+	bool  getPaymentStatus()
 	{
 		return paymentStatus;
 	}
 
 
-	float getPrice() 
+	float getPrice()
 	{
 		return price;
 	}
 
-	virtual bool checkCharge(float price,float charge) = 0;
+	virtual bool checkCharge(string cardID, float price, float charge) = 0;
 };
 
 
-class Credit : private Payment
+class Credit : public Payment
 {
 public:
 	bool checkCardValidity(string cardID, string pw)
 	{
+		/*The card info will contain id no., password, balance(Charge)*/
+		//cout << "hiii, I'm in" << endl;
+		ifstream readBalance("visa.txt");
+		string card_id;
+		string card_pw;
+		float card_balance;
+
+		while (readBalance >> card_id >> card_pw >> card_balance)
+		{
+			//cout << "I'm in 1" << endl;
+			if ((cardID == card_id) && (pw == card_pw))
+			{
+				//cout << "I'm in" << endl;
+				return 1;
+			}
+
+			if (!((cardID == card_id) && (pw == card_pw)))
+			{
+				return 0;
+			}
+		}
+
 
 	}
 
-	bool checkCharge(float price, float charge) 
+	bool checkCharge(string cardID, float price, float charge)
 	{
-		ifstream readBalance("visa.txt");
 
-		/*The card info will contain id no., password, balance(Charge)*/
-		
 		/* An object must be instantiated from credit class to get its price using the getPrice function to use the price in this current function
 		like so :
 		Credit my_payment;
 		price = my_payment.getPrice();
 		*/
-		
+		ifstream readBalance("visa.txt");
+		string card_id;
+		string card_pw;
+		float card_balance;
+
+		while (readBalance >> card_id >> card_pw >> card_balance)
+		{
+			if (cardID == card_id)
+			{
+				if (card_balance >= price)
+				{
+					return true;
+				}
+
+				else if (card_balance < price)
+				{
+					return false;
+				}
+			}
+
+
+		}
+
+	}
+
+
+
+};
+
+
+class Cash : public Payment
+{
+
+	bool checkCharge(float price, float charge)
+	{
 		if (charge >= price)
 		{
 			return true;
@@ -268,49 +321,46 @@ public:
 		}
 	}
 
-	bool checkCardValidity()
-	{
-
-	}
-
-};
-
-
-class Cash : private Payment
-{
-
-
 };
 
 void bankSimulation()
 {
 	/*initializing some credit card info*/
-	ofstream balance("visa.txt",ios::app);
+	ofstream balance("visa.txt", ios::app);
 	string card1_No = "4024007141525864";
 	string card1_pw = "dina";
-	int card1_balance = 100;
+	float card1_balance = 100;
 
 	string card2_No = "4532295627154748";
 	string card2_pw = "dinadina";
-	int card2_balance = 1;
+	float card2_balance = 1;
 
 	string card3_No = "4929230781795532";
 	string card3_pw = "dinadinadina";
-	int card3_balance = 200;
+	float card3_balance = 200;
 
 	balance << card1_No << " " << card1_pw << " " << card1_balance << endl;
-	cout << card1_No << " " << card1_pw << endl;
+	//cout << card1_No << " " << card1_pw << endl;
 
 	balance << card2_No << " " << card2_pw << " " << card2_balance << endl;
-	cout << card2_No << " " << card2_pw << endl;
-	
+	//cout << card2_No << " " << card2_pw << endl;
+
 	balance << card3_No << " " << card3_pw << " " << card3_balance << endl;
-	cout << card3_No << " " << card3_pw << endl;
+	//cout << card3_No << " " << card3_pw << endl;
 	balance.close();
 }
 
 
 int main() {
-	bankSimulation();
+	// bankSimulation();  //This only initialized one time
+
+	/*test case
+	Credit my_payment;
+	float price = my_payment.getPrice();
+	string card1 = "4024007141525864";
+	string pw1 = "dina";
+	bool result;
+	result = my_payment.checkCardValidity(card1, pw1);
+	cout << "My result is " << result << endl;*/
 	return 0;
 }
