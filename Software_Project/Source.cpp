@@ -340,7 +340,7 @@ public:
 	{
 		//here I'm pushing (initializing) table_status for six tables
 		//1 for available ------ 0 for reserved
-		vector<bool> tables_status;
+		//vector<bool> tables_status;
 		//t1_status
 		tables_status.push_back(1);
 
@@ -363,31 +363,48 @@ public:
 	//this is a constructor that will initialize the table status
 	Table()
 	{
-			
+
 		tableReservation();
-			
+
+		/*for (int i = 0; i < tables_status.size(); i++)
+		{
+			cout << "Table " << i + 1 << " status is:" << tables_status[i] << endl;
+		}*/
 
 	}
 
 	bool reserveTable(int table_no)
 	{
-		bool table_stat = tables_status.at(table_no + 1);
+		bool table_stat = tables_status.at(table_no - 1);
+
+		//cout << table_no << " " << tables_status[table_no - 1] << endl;
+
 		//here we need to check if the table is already reserved
 		if (table_stat == 0)
 		{
+			//cout << "Am I in?" << endl;
+
 			return 0; //reservation failed choose another table
 		}
 
 		else if (table_stat == 1)
 		{
 			//here we will change the value of the table status in the vector
-			tables_status[table_no + 1] == 0;
-
+			tables_status[table_no - 1] = 0;
+			//cout << "changing the table stat from " << !tables_status[table_no - 1] << " to " << tables_status[table_no - 1] << endl;
 			return 1; //table reserved
 		}
 	}
 };
 
+
+/*system class*/
+class System 
+{
+public:
+	
+
+};
 
 
 void bankSimulation()
@@ -460,9 +477,10 @@ int main() {
 	bankSimulation(); //This only initialized one time to fill the credit card info, or you could either remove ios::app to overwrite the file
 	
 
+	/*Test case
 	Table dina;
-	bool my_result = dina.reserveTable(1);
-	cout << "your result is :" << my_result << endl;
+	bool my_result = dina.reserveTable(2);
+	cout << "your result is :" << my_result << endl;*/
 
 	/*test case
 	Credit my_payment;
