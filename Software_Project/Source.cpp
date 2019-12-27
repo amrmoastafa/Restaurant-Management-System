@@ -10,7 +10,7 @@ class Item {
 private:
 	/* Each item object has price , tax , total price , type (0 for drink and 1 for food),
 	stockState ( 0 for out of stock and 1 for available , itemID & itemname */
-	float price,tax = ((price * 14) / 100) , totalPrice = price + tax;
+	float price, tax = ((price * 14) / 100), totalPrice = price + tax;
 	bool type, stockState;
 	int itemID;
 	string itemname;
@@ -46,7 +46,7 @@ public:
 	{
 		return itemID;
 	}
-	string get_itemname() 
+	string get_itemname()
 	{
 		return itemname;
 	}
@@ -68,10 +68,10 @@ public:
 	{
 		/* A loop iterating over the vector elements */
 		for (unsigned int i = 0; i < MainMenu.size(); i++)
-		{	
+		{
 			/* the item will be deleted if its ID is the same as the (required item to be deleted) ID,
 				, the arrow operator is used to access the attribute(ID) of the current iterated object */
-			if (  (MainMenu[i]->get_itemID()) == itemId )
+			if ((MainMenu[i]->get_itemID()) == itemId)
 			{
 				MainMenu.erase(MainMenu.begin() + i);
 			}
@@ -115,14 +115,14 @@ public:
 	string getName()
 	{
 		return name;
-	}	
-	
+	}
+
 	int getAge()
 	{
 		return age;
 	}
 
-		string getAddress()
+	string getAddress()
 	{
 		return address;
 	}
@@ -202,12 +202,12 @@ public:
 	bool newAdminAccount(Admin myAdminAcc, string myPassword)
 	{
 		/*NEED  to check whether the name is unique or not
-        we'll put the names in a vector, and loop over them, right?*/
+		we'll put the names in a vector, and loop over them, right?*/
 	}
 };
 
 
-/*Payment class and its inheritance*/
+/*Payment class and its inheritance, Order*/
 
 class Payment
 {
@@ -323,6 +323,73 @@ class Cash : public Payment
 
 };
 
+/*Order class*/
+class Order
+{
+
+};
+
+/*Table Class*/
+class Table
+{
+private:
+	bool stat;
+public:
+	vector<bool> tables_status;
+	void tableReservation()
+	{
+		//here I'm pushing (initializing) table_status for six tables
+		//1 for available ------ 0 for reserved
+		vector<bool> tables_status;
+		//t1_status
+		tables_status.push_back(1);
+
+		//t2_status
+		tables_status.push_back(0);
+
+		//t3_status
+		tables_status.push_back(1);
+
+		//t4_status
+		tables_status.push_back(1);
+
+		//t5_status
+		tables_status.push_back(0);
+
+		//t6_status
+		tables_status.push_back(0);
+	}
+
+	//this is a constructor that will initialize the table status
+	Table()
+	{
+			
+		tableReservation();
+			
+
+	}
+
+	bool reserveTable(int table_no)
+	{
+		bool table_stat = tables_status.at(table_no + 1);
+		//here we need to check if the table is already reserved
+		if (table_stat == 0)
+		{
+			return 0; //reservation failed choose another table
+		}
+
+		else if (table_stat == 1)
+		{
+			//here we will change the value of the table status in the vector
+			tables_status[table_no + 1] == 0;
+
+			return 1; //table reserved
+		}
+	}
+};
+
+
+
 void bankSimulation()
 {
 	/*initializing some credit card info*/
@@ -350,9 +417,52 @@ void bankSimulation()
 	balance.close();
 }
 
+/*void tableReservation()
+{
+	//initializing some table reserved and available
+	ofstream my_table("tables.txt", ios::app);
+	//1 for available ------ 0 for reserved
+	string table1 = "table_1";
+	bool t1_status = 1;
+
+	string table2 = "table_2";
+	bool t2_status = 0;
+
+	string table3 = "table_3";
+	bool t3_status = 0;
+
+	string table4 = "table_4";
+	bool t4_status = 1;
+
+	string table5 = "table_5";
+	bool t5_status = 1;
+
+	string table6 = "table_6";
+	bool t6_status = 0;
+
+	my_table << table1 << " " << t1_status << endl;
+
+	my_table << table2 << " " << t2_status << endl;
+
+	my_table << table3 << " " << t3_status << endl;
+
+	my_table << table4 << " " << t4_status << endl;
+
+	my_table << table5 << " " << t5_status << endl;
+
+	my_table << table6 << " " << t6_status << endl;
+
+	my_table.close();
+}*/
+
 
 int main() {
-	// bankSimulation();  //This only initialized one time
+	bankSimulation(); //This only initialized one time to fill the credit card info, or you could either remove ios::app to overwrite the file
+	
+
+	Table dina;
+	bool my_result = dina.reserveTable(1);
+	cout << "your result is :" << my_result << endl;
 
 	/*test case
 	Credit my_payment;
@@ -362,5 +472,6 @@ int main() {
 	bool result;
 	result = my_payment.checkCardValidity(card1, pw1);
 	cout << "My result is " << result << endl;*/
+
 	return 0;
 }
