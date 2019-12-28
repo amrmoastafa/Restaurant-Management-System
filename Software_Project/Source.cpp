@@ -316,6 +316,12 @@ public:
 
 		//t6_status
 		tables_status.push_back(0);
+
+		//t7_status
+		tables_status.push_back(1);
+
+		//t8_status
+		tables_status.push_back(1);
 	}
 
 	//this is a constructor that will initialize the table status
@@ -706,7 +712,7 @@ int main() {
 	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &Dina);
 	RestaurantManager.changePassword(Dina.getID(), "character", "new", &RestaurantManager);
 
-	
+	/*Test Case for checking order status*/
 	Order my_order;
 	bool orderStat = my_order.getOrderStatus();
 	cout << "Your order is (boolen): " << orderStat<<endl;
