@@ -82,9 +82,10 @@ public:
 
 class User
 {
-private:
+protected:
 	string name, address, city, number;
 	int age, id;
+	bool is_logged_in;
 public:
 	/*User Class Code Goes Here*/
 	void setName(string myName)
@@ -116,7 +117,8 @@ public:
 	{
 		return name;
 	}
-
+	virtual void set_login() = 0;
+	virtual void reset_login() = 0;
 	int getAge()
 	{
 		return age;
@@ -141,56 +143,52 @@ public:
 	{
 		return id;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
 
-class Admin : private User
+class Admin : public User
 {
-	/* Admin class code */
+private:
+	string jobType;
+	bool workStatus, active;
+	float rate;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+public:
+	void setWorkStatus(bool mystatus)
+	{
+		workStatus = mystatus;
+	}
+	bool getWorkStatus()
+	{
+		return workStatus;
+	}
+	void editMenu(Item *myItem, Menu *myMenu)
+	{
+		myMenu->addItem(myItem);
+	}
+	bool setStatus()
+	{
+		active = 1;
+	}
+	void checkAllOrderStatus(System MainSystemObject)
+	{
+		for (int i = 0; i < MainSystemObject.AllOrdersVect.size(); i++)
+		{
+			//cout << (MainSystemObject.AllOrdersVect)[i].itemsselected[/*loop here to print every item of every order :)*/];
+		}
+		// Still Under Construction
+	}
+	void set_login()
+	{
+		is_logged_in = 1;
+	}
+	void reset_login()
+	{
+		is_logged_in = 0;
+	}
+	bool view_loginStatus()
+	{
+		return is_logged_in;
+	}
 };
 
 class Account
@@ -201,8 +199,62 @@ private:
 public:
 	bool newAdminAccount(Admin myAdminAcc, string myPassword)
 	{
-		/*NEED  to check whether the name is unique or not
-		we'll put the names in a vector, and loop over them, right?*/
+		if (myPassword == password)
+		{
+			AdminAccount = myAdminAcc;
+			password = myPassword;
+			return SUCCESS;
+		}
+		else
+		{
+			return FAIL;
+		}
+	}
+
+	bool deleteAccount(int myID, string myPassword, Admin* myAdmin)
+	{
+		if (myPassword == password)
+		{
+			delete myAdmin;
+			return SUCCESS;
+		}
+		else
+		{
+			return FAIL;
+		}
+	}
+
+	bool changePassword(int myID, string myOldPassword, string myNewPassword)
+	{
+		if (myOldPassword == password)
+		{
+			myOldPassword = myNewPassword;
+			return SUCCESS;
+		}
+		else
+		{
+			return FAIL;
+		}
+	}
+
+	void viewAccountDetails(int myID, string  myPassword, Admin* myAdmin)
+	{
+		if (myAdmin->getID() == myID)
+		{
+			password = myPassword;
+		}
+	}
+
+	bool login(int myID, string myPassword, Admin* myadmin)
+	{
+		myadmin->set_login();
+		return SUCCESS;
+	}
+		
+	bool logout(Admin* myadmin)
+	{	
+		myadmin->reset_login();
+		return SUCCESS;
 	}
 };
 
@@ -399,10 +451,11 @@ public:
 
 
 /*system class*/
-class System 
+class System
 {
 public:
-	
+	vector <Order*> AllOrdersVect;
+
 
 };
 
