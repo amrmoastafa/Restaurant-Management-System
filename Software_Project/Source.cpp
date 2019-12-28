@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-
+#include <algorithm>
 
 using namespace std;
 
@@ -326,7 +326,51 @@ class Cash : public Payment
 /*Order class*/
 class Order
 {
+private:
+	bool orderType;
+	float orderPrice = 0.0;
+	float totalPrice = orderPrice + 0.14 * orderPrice;
+	vector <Item> itemSelectedVect;
+	int numberOfItem;
+public:
+	
+	//this function add item and number of items chosen from this specific item
+	void addToOrder(Item newItem, int selectedItemNumber) 
+	{
+		for (int i = 0; i < selectedItemNumber; i++)
+		{
+			itemSelectedVect.push_back(newItem);
+		}
+	}
 
+	void removeFromOrder(Item toBeRemovedItem, int selectedItemNumber)
+	{
+		/*vector<Item>::iterator it;
+		it = find(itemSelectedVect.begin(), itemSelectedVect.end(), toBeRemovedItem);
+		if (it != itemSelectedVect.end())
+		{
+			index = it - itemSelectedVect.begin();
+		}
+		for (int i = 0; i < itemSelectedVect.size(); i++)
+		{
+			itemSelectedVect.erase(itemSelectedVect.begin()+index);
+
+		}*/
+		ptrdiff_t pos = find(itemSelectedVect.begin(), itemSelectedVect.end(), toBeRemovedItem) - itemSelectedVect.begin();
+		for (int i = 0; i < itemSelectedVect.size(); i++)
+		{
+			itemSelectedVect.erase(itemSelectedVect.begin() + pos);
+		}
+	}
+
+	float confirmOrder()
+	{
+		for (int i = 0; i < itemSelectedVect.size(); i++)
+		{
+			orderPrice += (itemSelectedVect[i]).get_price();
+		}
+		return totalPrice;
+	}
 };
 
 /*Table Class*/
