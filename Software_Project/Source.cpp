@@ -101,72 +101,6 @@ public:
 
 
 
-class Account
-{
-private:
-	string password;
-	Admin AdminAccount;
-public:
-	bool newAdminAccount(Admin myAdminAcc, string myPassword)
-	{
-		if (myPassword == password)
-		{
-			AdminAccount = myAdminAcc;
-			password = myPassword;
-			return SUCCESS;
-		}
-		else
-		{
-			return FAIL;
-		}
-	}
-
-	bool deleteAccount(int myID, string myPassword, Admin* myAdmin)
-	{
-		if (myPassword == password)
-		{
-			delete myAdmin;
-			return SUCCESS;
-		}
-		else
-		{
-			return FAIL;
-		}
-	}
-
-	bool changePassword(int myID, string myOldPassword, string myNewPassword)
-	{
-		if (myOldPassword == password)
-		{
-			myOldPassword = myNewPassword;
-			return SUCCESS;
-		}
-		else
-		{
-			return FAIL;
-		}
-	}
-
-	void viewAccountDetails(int myID, string  myPassword, Admin* myAdmin)
-	{
-		if (myAdmin->getID() == myID)
-		{
-			password = myPassword;
-		}
-	}
-
-	bool login(int myID, string myPassword, Admin* myadmin)
-	{
-		myadmin->set_login();
-		return SUCCESS;
-	}
-		
-	bool logout(Admin* myadmin)
-	{	
-		myadmin->reset_login();
-		return SUCCESS;
-	}
-};
 
 
 /*Payment class and its inheritance, Order*/
@@ -495,7 +429,7 @@ public:
 			cout << myMenu.MainMenu[i] << endl;
 		}
 	}
-	void makePayment(Credit mypay)
+	void makePayment(Credit mypay, float myPrice)
 	{
 		/* Here we need extra parameters such as price and card details */
 	}
@@ -518,6 +452,10 @@ private:
 	float rate;
 
 public:
+	Admin()
+	{
+		setAddress("maadi"); setAge(10); setCity("Cairo"); setID(007); setName("None"); setNumber("007"); setWorkStatus(1);
+	}
 	void setWorkStatus(bool mystatus)
 	{
 		workStatus = mystatus;
@@ -553,6 +491,73 @@ public:
 	bool view_loginStatus()
 	{
 		return is_logged_in;
+	}
+};
+class Account
+{
+private:
+	string password;
+	Admin AdminAccount;
+public:
+	bool newAdminAccount(Admin myAdminAcc, string myPassword)
+	{
+		AdminAccount = myAdminAcc;
+		password = myPassword;
+		return SUCCESS;
+	}
+
+	bool deleteAccount(int myID, string myPassword, Admin* myAdmin)
+	{
+		if (myPassword == password)
+		{
+			delete myAdmin;
+			return SUCCESS;
+		}
+		else
+		{
+			return FAIL;
+		}
+	}
+
+	bool changePassword(int myID, string myOldPassword, string myNewPassword , Account* myAdminAccount)
+	{
+		if (myOldPassword == myAdminAccount->password)
+		{
+			myAdminAccount->password = myNewPassword;
+			return SUCCESS;
+		}
+		else
+		{
+			cout << myOldPassword << endl << myAdminAccount->password <<endl;
+			return FAIL;
+		}
+	}
+
+	void viewAccountDetails(int myID, string  myPassword, Admin* myAdmin)
+	{
+		if (myAdmin->getID() == myID)
+		{
+			cout << myAdmin->getAddress() <<endl;
+			cout << myAdmin->getAge() << endl;
+			cout << myAdmin->getCity() << endl;
+			cout << myAdmin->getID() << endl;
+			cout << myAdmin->getName() << endl;
+			cout << myAdmin->getNumber() << endl;
+			cout << myAdmin->getWorkStatus() << endl;
+			
+		}
+	}
+
+	bool login(int myID, string myPassword, Admin* myadmin)
+	{
+		myadmin->set_login();
+		return SUCCESS;
+	}
+		
+	bool logout(Admin* myadmin)
+	{	
+		myadmin->reset_login();
+		return SUCCESS;
 	}
 };
 void bankSimulation()
@@ -622,6 +627,36 @@ void bankSimulation()
 
 
 int main() {
+/* My Testcase "AMR" */
+	//first creating a couple of items
+	Item Pepsi;
+	Pepsi.setItem(0, 5, 1, 777, "Pepsi Cola");
+	Item CheeseCake;
+	CheeseCake.setItem(1, 50, 1, 778, "CheeseCake Desert");
+	Item Tea;
+	Tea.setItem(0, 10, 1, 779, "Shay");
+	Item Pasta;
+	Pasta.setItem(1, 40, 1,780,"Pasta Avec de sauce francaise");
+	//Adding items to the menu
+	Menu Main;
+	Main.addItem(&Pepsi); Main.addItem(&CheeseCake); Main.addItem(&Pasta); Main.addItem(&Tea);
+	for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";
+	cout << endl;
+	//now removing shay from life
+	Main.deleteItem(779);
+	for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";
+	/*
+		Here I need a code to take a couple of orders then register them all in system in vector named  "AllOrdersVect"
+	*/
+	
+
+/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
+	Admin Dina;
+	Dina.setName("Dina");
+	Account RestaurantManager;
+	RestaurantManager.newAdminAccount(Dina, "character");
+	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &Dina);
+	RestaurantManager.changePassword(Dina.getID(), "character", "new",&RestaurantManager);
 
 	/*Item item1;
 	item1.setItem(0, 0, 0, 12, "Amr");
