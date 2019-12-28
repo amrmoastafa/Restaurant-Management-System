@@ -519,16 +519,16 @@ public:
 		}
 	}
 
-	bool changePassword(int myID, string myOldPassword, string myNewPassword , Account* myAdminAccount)
+	bool changePassword(int myID, string myOldPassword, string myNewPassword , Account* myAdmin)
 	{
-		if (myOldPassword == myAdminAccount->password)
+		if (myOldPassword == password)
 		{
-			myAdminAccount->password = myNewPassword;
+			password = myNewPassword;
 			return SUCCESS;
 		}
 		else
 		{
-			cout << myOldPassword << endl << myAdminAccount->password <<endl;
+			cout << myOldPassword << endl << myAdmin->password <<endl;
 			return FAIL;
 		}
 	}
@@ -657,6 +657,7 @@ int main() {
 	RestaurantManager.newAdminAccount(Dina, "character");
 	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &Dina);
 	RestaurantManager.changePassword(Dina.getID(), "character", "new",&RestaurantManager);
+
 
 	/*Item item1;
 	item1.setItem(0, 0, 0, 12, "Amr");
