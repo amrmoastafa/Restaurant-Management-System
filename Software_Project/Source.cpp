@@ -99,10 +99,6 @@ public:
 
 };
 
-
-
-
-
 /*Payment class and its inheritance, Order*/
 
 class Payment
@@ -131,7 +127,6 @@ public:
 
 	virtual bool checkCharge(string cardID, float price, float charge) = 0;
 };
-
 
 class Credit : public Payment
 {
@@ -222,6 +217,7 @@ private:
 	bool orderType;
 	float orderPrice = 0.0;
 	float totalPrice = orderPrice + 0.14 * orderPrice;
+	bool orderStatus;
 	vector <Item> itemSelectedVect;
 	int numberOfItem;
 public:
@@ -246,12 +242,15 @@ public:
 		for (int i = 0; i < itemSelectedVect.size(); i++)
 		{
 			itemSelectedVect.erase(itemSelectedVect.begin()+index);
-		}*/
+		}
 		/*ptrdiff_t pos = find(itemSelectedVect.begin(), itemSelectedVect.end(), toBeRemovedItem) - itemSelectedVect.begin();
 		for (int i = 0; i < itemSelectedVect.size(); i++)
 		{
 			itemSelectedVect.erase(itemSelectedVect.begin() + pos);
-		}*/
+		}
+
+		*/
+		
 		// PLEASE Return to the main function for a more detailed explanation if I was asleep , and delete this comment once you  read it
 		// msh 3yzyn nesalem el  proj keda XD
 		for (int i = 0; i < (itemSelectedVect.size()); i++)
@@ -273,6 +272,19 @@ public:
 		}
 		return totalPrice;
 	}
+
+	void setOrderStatus(bool stat)
+	{
+		orderStatus = stat;
+	}
+
+	bool getOrderStatus()
+	{
+		return stat;
+	}
+
+	friend class Admin;
+	friend class System;
 };
 
 /*Table Class*/
@@ -319,28 +331,32 @@ public:
 
 	}
 
-	bool reserveTable(int table_no)
+	void reserveTable(int table_no)
 	{
 		bool table_stat = tables_status.at(table_no - 1);
 
 		//cout << table_no << " " << tables_status[table_no - 1] << endl;
 
 		//here we need to check if the table is already reserved
-		if (table_stat == 0)
-		{
-			//cout << "Am I in?" << endl;
 
-			return 0; //reservation failed choose another table
-		}
+		//if (table_stat == 0)
+		//{
+		//	//cout << "Am I in?" << endl;
 
-		else if (table_stat == 1)
+		//	return 0; //reservation failed choose another table
+		//}
+
+		if (table_stat == 1)
 		{
 			//here we will change the value of the table status in the vector
 			tables_status[table_no - 1] = 0;
+
 			//cout << "changing the table stat from " << !tables_status[table_no - 1] << " to " << tables_status[table_no - 1] << endl;
-			return 1; //table reserved
+			//return 1; //table reserved
 		}
 	}
+
+	friend class System;
 };
 
 
@@ -431,15 +447,31 @@ public:
 	}
 	void makePayment(Credit mypay, float myPrice)
 	{
-		/* Here we need extra parameters such as price and card details */
+		
 	}
 	string checkPersonalOrderStatus(int orderNum)
 	{
-		/* Some Code */
 	}
 	void checkAvailableTables()
 	{
-		/*some code*/
+		vector <int>availableTables;
+		int index = 0;
+
+		for (int i = 0; i < tablesArr.tables_status.size(); i++)
+		{
+			if (tablesArr.tables_status[i] == 1)
+			{
+				availableTables.push_back(i);
+			}
+		}
+		 /*testing*/
+		/*for (int j = 0; j < availableTables.size(); j++)
+		{
+			cout << "This table is " << j << " and its no. is " << availableTables[j] + 1 << endl;
+		}*/
+
+
+
 	}
 };
 
@@ -472,6 +504,7 @@ public:
 	{
 		active = 1;
 	}
+	
 	void checkAllOrderStatus(System MainSystemObject)
 	{
 		for (int i = 0; i < MainSystemObject.AllOrdersVect.size(); i++)
@@ -493,6 +526,7 @@ public:
 		return is_logged_in;
 	}
 };
+
 class Account
 {
 private:
@@ -560,6 +594,7 @@ public:
 		return SUCCESS;
 	}
 };
+
 void bankSimulation()
 {
 	/*initializing some credit card info*/
@@ -658,6 +693,9 @@ int main() {
 	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &Dina);
 	RestaurantManager.changePassword(Dina.getID(), "character", "new",&RestaurantManager);
 
+	/*This test case for check available tables*/
+	/*System dina;
+	dina.checkAvailableTables();*/
 
 	/*Item item1;
 	item1.setItem(0, 0, 0, 12, "Amr");
