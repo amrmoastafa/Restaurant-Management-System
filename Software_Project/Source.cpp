@@ -217,7 +217,7 @@ private:
 	bool orderType;
 	float orderPrice = 0.0;
 	float totalPrice = orderPrice + 0.14 * orderPrice;
-	bool orderStatus;
+	bool orderStatus=0;
 	vector <Item> itemSelectedVect;
 	int numberOfItem;
 public:
@@ -273,14 +273,14 @@ public:
 		return totalPrice;
 	}
 
-	void setOrderStatus(bool stat)
+	/*void setOrderStatus(bool stat)
 	{
 		orderStatus = stat;
-	}
+	}*/
 
 	bool getOrderStatus()
 	{
-		return stat;
+		return orderStatus;
 	}
 
 	friend class Admin;
@@ -451,8 +451,16 @@ public:
 		bool validity = mypay.checkCardValidity(card_ID, pw_);
 		bool valid_charge = mypay.checkCharge(card_ID,myPrice,charge);
 	}
-	string checkPersonalOrderStatus(int orderNum)
+	string checkPersonalOrderStatus(Order &my_order)
 	{
+		if (!(my_order.getOrderStatus()))
+		{
+			return "Your order is not ready :'( !";
+		}
+		if ((my_order.getOrderStatus()))
+		{
+			return "Your order is ready, Bon apetite!";
+		}
 	}
 	void checkAvailableTables()
 	{
@@ -466,6 +474,7 @@ public:
 				availableTables.push_back(i);
 			}
 		}
+
 		 /*testing*/
 		/*for (int j = 0; j < availableTables.size(); j++)
 		{
@@ -505,6 +514,10 @@ public:
 	bool setStatus()
 	{
 		active = 1;
+	}
+	void setOrderStatus(Order &order)
+	{
+		order.orderStatus = 1;
 	}
 	
 	void checkAllOrderStatus(System MainSystemObject)
@@ -685,16 +698,29 @@ int main() {
 	/*
 		Here I need a code to take a couple of orders then register them all in system in vector named  "AllOrdersVect"
 	*/
-	
-
-/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
+	System james_bond;
 	Admin Dina;
 	Dina.setName("Dina");
 	Account RestaurantManager;
 	RestaurantManager.newAdminAccount(Dina, "character");
 	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &Dina);
-	RestaurantManager.changePassword(Dina.getID(), "character", "new",&RestaurantManager);
+	RestaurantManager.changePassword(Dina.getID(), "character", "new", &RestaurantManager);
 
+	
+	Order my_order;
+	bool orderStat = my_order.getOrderStatus();
+	cout << "Your order is (boolen): " << orderStat<<endl;
+	string result = james_bond.checkPersonalOrderStatus(my_order);
+	cout << result << endl << endl;
+	Dina.setOrderStatus(my_order);
+	orderStat = my_order.getOrderStatus();
+	cout << "Your order now is (boolen): " << orderStat << endl;
+	result = james_bond.checkPersonalOrderStatus(my_order);
+	cout << result <<endl;
+	cout << endl;
+
+/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
+	
 	/*This test case for check available tables*/
 	/*System dina;
 	dina.checkAvailableTables();*/
