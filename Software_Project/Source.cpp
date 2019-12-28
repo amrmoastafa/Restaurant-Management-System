@@ -529,10 +529,14 @@ public:
 	void checkAllOrderStatus(System MainSystemObject)
 	{
 		for (int i = 0; i < MainSystemObject.AllOrdersVect.size(); i++)
-		{
-			//cout << (MainSystemObject.AllOrdersVect)[i].itemsselected[/*loop here to print every item of every order :)*/];
+		{	
+			cout << "Order (" << i+1 << ") contains : " <<endl;
+			Order current_order = *(MainSystemObject.AllOrdersVect[i]);
+			for (int j = 0; j < current_order.itemSelectedVect.size(); j++)
+			{
+				cout << "\t" <<current_order.itemSelectedVect[j].get_itemname() << " , Status : " << current_order.orderStatus << endl;
+			}
 		}
-		// Still Under Construction
 	}
 	void set_login()
 	{
@@ -574,7 +578,7 @@ public:
 		}
 	}
 
-	bool changePassword(int myID, string myOldPassword, string myNewPassword , Account* myAdmin)
+	bool changePassword(int myID, string myOldPassword, string myNewPassword, Account* myAdmin)
 	{
 		if (myOldPassword == password)
 		{
@@ -583,11 +587,10 @@ public:
 		}
 		else
 		{
-			cout << myOldPassword << endl << myAdmin->password <<endl;
+			//acout << myOldPassword << endl << myAdmin->password << endl;
 			return FAIL;
 		}
 	}
-
 	void viewAccountDetails(int myID, string  myPassword, Admin* myAdmin)
 	{
 		if (myAdmin->getID() == myID)
@@ -683,8 +686,17 @@ void bankSimulation()
 
 
 int main() {
-/* My Testcase "AMR" */
-	//first creating a couple of items
+	/* My Testcase "AMR" */
+	/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
+	System MainSystem;
+	Admin Dina;
+	Dina.setName("Dina");
+	Account RestaurantManager;
+	RestaurantManager.newAdminAccount(Dina, "character");
+	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &RestaurantManager);
+	RestaurantManager.changePassword(Dina.getID(), "character", "new", &RestaurantManager);
+	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &RestaurantManager);//trying to access account using old password
+		//first creating a couple of items
 	Item Pepsi;
 	Pepsi.setItem(0, 5, 1, 777, "Pepsi Cola");
 	Item CheeseCake;
@@ -692,25 +704,23 @@ int main() {
 	Item Tea;
 	Tea.setItem(0, 10, 1, 779, "Shay");
 	Item Pasta;
-	Pasta.setItem(1, 40, 1,780,"Pasta Avec de sauce francaise");
+	Pasta.setItem(1, 40, 1, 780, "Pasta Avec de sauce francaise");
 	//Adding items to the menu
 	Menu Main;
 	Main.addItem(&Pepsi); Main.addItem(&CheeseCake); Main.addItem(&Pasta); Main.addItem(&Tea);
-	for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";
+	/*for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";*/
 	cout << endl;
 	//now removing shay from life
 	Main.deleteItem(779);
-	for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";
+	/*for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";*/
 	/*
 		Here I need a code to take a couple of orders then register them all in system in vector named  "AllOrdersVect"
 	*/
-	System james_bond;
-	Admin Dina;
-	Dina.setName("Dina");
-	Account RestaurantManager;
-	RestaurantManager.newAdminAccount(Dina, "character");
-	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &Dina);
-	RestaurantManager.changePassword(Dina.getID(), "character", "new", &RestaurantManager);
+	Order First_order;
+	First_order.addToOrder(Pepsi, 1);
+	First_order.addToOrder(CheeseCake, 2);
+	MainSystem.RegisterOrder(&First_order);
+	Dina.checkAllOrderStatus(MainSystem);
 
 	/*Test Case for checking order status*/
 	Order my_order;
