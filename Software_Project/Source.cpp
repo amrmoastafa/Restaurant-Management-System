@@ -445,9 +445,11 @@ public:
 			cout << myMenu.MainMenu[i] << endl;
 		}
 	}
-	void makePayment(Credit mypay, float myPrice)
+	void makePayment(Credit mypay, float myPrice, string card_ID, string pw_, float charge)
 	{
-		
+		//this needs to be reviewed *URGENTLY*
+		bool validity = mypay.checkCardValidity(card_ID, pw_);
+		bool valid_charge = mypay.checkCharge(card_ID,myPrice,charge);
 	}
 	string checkPersonalOrderStatus(int orderNum)
 	{
