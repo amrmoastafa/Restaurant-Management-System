@@ -4,7 +4,10 @@
 #include <fstream>
 #include <algorithm>
 
+//This is the latest we got
 using namespace std;
+#define SUCCESS 1;
+#define FAIL 0;
 
 class Item {
 private:
@@ -16,6 +19,7 @@ private:
 	string itemname;
 
 public:
+	
 	/* A function to set the attributes of items , it take input itemtype , price , stockstate , itemit, itemname */
 	void setItem(bool itemType, float itemPrice, bool itemStockState, int ItemID, string itemName)
 	{
@@ -50,14 +54,29 @@ public:
 	{
 		return itemname;
 	}
+	/* Operator Overloaded to compare between two item objects */
+	bool operator == (Item item1)
+	{
+		if ( (item1.get_itemID() == itemID) && ((item1.get_itemname()) == itemname) \
+			&& (item1.get_price() == price) && (item1.get_stockState() == stockState)\
+			&& (item1.get_type() == type) )
+		{
+			
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 };
 
 class Menu {
-private:
+public:
 	/* The Menu class will be a vector of pointers to Item class objects */
 	vector<Item*> MainMenu;
 
-public:
 	/* the addItem method can be used to add an item to the vectors by passing the Item object address */
 	void addItem(Item* myItem)
 	{
@@ -80,116 +99,7 @@ public:
 
 };
 
-class User
-{
-protected:
-	string name, address, city, number;
-	int age, id;
-	bool is_logged_in;
-public:
-	/*User Class Code Goes Here*/
-	void setName(string myName)
-	{
-		name = myName;
-	}
-	void setAge(int myAge)
-	{
-		age = myAge;
-	}
-	void setAddress(string myAdddress)
-	{
-		address = myAdddress;
-	}
-	void setCity(string myCity)
-	{
-		city = myCity;
-	}
-	void setNumber(string myNumber)
-	{
-		number = myNumber;
-	}
-	void setID(int myID)
-	{
-		id = myID;
-	}
-	/* The get functions should start here */
-	string getName()
-	{
-		return name;
-	}
-	virtual void set_login() = 0;
-	virtual void reset_login() = 0;
-	int getAge()
-	{
-		return age;
-	}
 
-	string getAddress()
-	{
-		return address;
-	}
-
-	string getCity()
-	{
-		return city;
-	}
-
-	string getNumber()
-	{
-		return number;
-	}
-
-	int getID()
-	{
-		return id;
-	}
-};
-
-class Admin : public User
-{
-private:
-	string jobType;
-	bool workStatus, active;
-	float rate;
-
-public:
-	void setWorkStatus(bool mystatus)
-	{
-		workStatus = mystatus;
-	}
-	bool getWorkStatus()
-	{
-		return workStatus;
-	}
-	void editMenu(Item *myItem, Menu *myMenu)
-	{
-		myMenu->addItem(myItem);
-	}
-	bool setStatus()
-	{
-		active = 1;
-	}
-	void checkAllOrderStatus(System MainSystemObject)
-	{
-		for (int i = 0; i < MainSystemObject.AllOrdersVect.size(); i++)
-		{
-			//cout << (MainSystemObject.AllOrdersVect)[i].itemsselected[/*loop here to print every item of every order :)*/];
-		}
-		// Still Under Construction
-	}
-	void set_login()
-	{
-		is_logged_in = 1;
-	}
-	void reset_login()
-	{
-		is_logged_in = 0;
-	}
-	bool view_loginStatus()
-	{
-		return is_logged_in;
-	}
-};
 
 class Account
 {
@@ -351,11 +261,7 @@ public:
 		}
 
 	}
-
-
-
 };
-
 
 class Cash : public Payment
 {
@@ -385,9 +291,9 @@ private:
 	vector <Item> itemSelectedVect;
 	int numberOfItem;
 public:
-	
+
 	//this function add item and number of items chosen from this specific item
-	void addToOrder(Item newItem, int selectedItemNumber) 
+	void addToOrder(Item newItem, int selectedItemNumber = 1)
 	{
 		for (int i = 0; i < selectedItemNumber; i++)
 		{
@@ -406,12 +312,22 @@ public:
 		for (int i = 0; i < itemSelectedVect.size(); i++)
 		{
 			itemSelectedVect.erase(itemSelectedVect.begin()+index);
-
 		}*/
-		ptrdiff_t pos = find(itemSelectedVect.begin(), itemSelectedVect.end(), toBeRemovedItem) - itemSelectedVect.begin();
+		/*ptrdiff_t pos = find(itemSelectedVect.begin(), itemSelectedVect.end(), toBeRemovedItem) - itemSelectedVect.begin();
 		for (int i = 0; i < itemSelectedVect.size(); i++)
 		{
 			itemSelectedVect.erase(itemSelectedVect.begin() + pos);
+		}*/
+		// PLEASE Return to the main function for a more detailed explanation if I was asleep , and delete this comment once you  read it
+		// msh 3yzyn nesalem el  proj keda XD
+		for (int i = 0; i < (itemSelectedVect.size()); i++)
+		{
+		
+			if (itemSelectedVect[i] == toBeRemovedItem)
+			{
+				itemSelectedVect.erase(itemSelectedVect.begin() + i);
+			}
+			
 		}
 	}
 
@@ -494,16 +410,151 @@ public:
 };
 
 
+class User
+{
+protected:
+	string name, address, city, number;
+	int age, id;
+	bool is_logged_in;
+public:
+	/*User Class Code Goes Here*/
+	void setName(string myName)
+	{
+		name = myName;
+	}
+	void setAge(int myAge)
+	{
+		age = myAge;
+	}
+	void setAddress(string myAdddress)
+	{
+		address = myAdddress;
+	}
+	void setCity(string myCity)
+	{
+		city = myCity;
+	}
+	void setNumber(string myNumber)
+	{
+		number = myNumber;
+	}
+	void setID(int myID)
+	{
+		id = myID;
+	}
+	/* The get functions should start here */
+	string getName()
+	{
+		return name;
+	}
+	virtual void set_login() = 0;
+	virtual void reset_login() = 0;
+	int getAge()
+	{
+		return age;
+	}
+
+	string getAddress()
+	{
+		return address;
+	}
+
+	string getCity()
+	{
+		return city;
+	}
+
+	string getNumber()
+	{
+		return number;
+	}
+
+	int getID()
+	{
+		return id;
+	}
+};
+
 /*system class*/
 class System
 {
 public:
 	vector <Order*> AllOrdersVect;
-
-
+	Order customizedOrder;
+	Menu integratedMenu;
+	Table tablesArr;
+	
+	void makeOrder(Item item)
+	{
+		customizedOrder.addToOrder(item);
+	}
+	void viewMenu(Menu myMenu)
+	{
+		for (int i = 0; i < myMenu.MainMenu.size(); i++)
+		{
+			cout << myMenu.MainMenu[i] << endl;
+		}
+	}
+	void makePayment(Credit mypay)
+	{
+		/* Here we need extra parameters such as price and card details */
+	}
+	string checkPersonalOrderStatus(int orderNum)
+	{
+		/* Some Code */
+	}
+	void checkAvailableTables()
+	{
+		/*some code*/
+	}
 };
 
 
+class Admin : public User
+{
+private:
+	string jobType;
+	bool workStatus, active;
+	float rate;
+
+public:
+	void setWorkStatus(bool mystatus)
+	{
+		workStatus = mystatus;
+	}
+	bool getWorkStatus()
+	{
+		return workStatus;
+	}
+	void editMenu(Item *myItem, Menu *myMenu)
+	{
+		myMenu->addItem(myItem);
+	}
+	bool setStatus()
+	{
+		active = 1;
+	}
+	void checkAllOrderStatus(System MainSystemObject)
+	{
+		for (int i = 0; i < MainSystemObject.AllOrdersVect.size(); i++)
+		{
+			//cout << (MainSystemObject.AllOrdersVect)[i].itemsselected[/*loop here to print every item of every order :)*/];
+		}
+		// Still Under Construction
+	}
+	void set_login()
+	{
+		is_logged_in = 1;
+	}
+	void reset_login()
+	{
+		is_logged_in = 0;
+	}
+	bool view_loginStatus()
+	{
+		return is_logged_in;
+	}
+};
 void bankSimulation()
 {
 	/*initializing some credit card info*/
@@ -571,8 +622,21 @@ void bankSimulation()
 
 
 int main() {
-	bankSimulation(); //This only initialized one time to fill the credit card info, or you could either remove ios::app to overwrite the file
-	
+
+	/*Item item1;
+	item1.setItem(0, 0, 0, 12, "Amr");
+	Item item2;
+	item2.setItem(0, 0, 0, 10, "Dina");
+	if (item1 == item1)
+	{
+		cout << "Succeeded";
+	}
+	else
+	{
+		cout << "Fail";
+	}*/
+	//bankSimulation(); //This only initialized one time to fill the credit card info, or you could either remove ios::app to overwrite the file
+
 
 	/*Test case
 	Table dina;
