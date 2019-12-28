@@ -646,43 +646,7 @@ void bankSimulation()
 	balance.close();
 }
 
-/*void tableReservation()
-{
-	//initializing some table reserved and available
-	ofstream my_table("tables.txt", ios::app);
-	//1 for available ------ 0 for reserved
-	string table1 = "table_1";
-	bool t1_status = 1;
 
-	string table2 = "table_2";
-	bool t2_status = 0;
-
-	string table3 = "table_3";
-	bool t3_status = 0;
-
-	string table4 = "table_4";
-	bool t4_status = 1;
-
-	string table5 = "table_5";
-	bool t5_status = 1;
-
-	string table6 = "table_6";
-	bool t6_status = 0;
-
-	my_table << table1 << " " << t1_status << endl;
-
-	my_table << table2 << " " << t2_status << endl;
-
-	my_table << table3 << " " << t3_status << endl;
-
-	my_table << table4 << " " << t4_status << endl;
-
-	my_table << table5 << " " << t5_status << endl;
-
-	my_table << table6 << " " << t6_status << endl;
-
-	my_table.close();
-}*/
 
 
 int main() {
