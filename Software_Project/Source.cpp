@@ -623,7 +623,7 @@ public:
 		}
 		else
 		{
-			cout << "Wrong Cridentials Provided" << endl;
+			cout << "\033[1;31mWrong Cridentials Provided\033[0m\n";
 		}
 
 	}
