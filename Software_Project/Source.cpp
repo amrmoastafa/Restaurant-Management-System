@@ -19,7 +19,7 @@ private:
 	string itemname;
 
 public:
-	
+
 	/* A function to set the attributes of items , it take input itemtype , price , stockstate , itemit, itemname */
 	void setItem(bool itemType, float itemPrice, bool itemStockState, int ItemID, string itemName)
 	{
@@ -57,11 +57,11 @@ public:
 	/* Operator Overloaded to compare between two item objects */
 	bool operator == (Item item1)
 	{
-		if ( (item1.get_itemID() == itemID) && ((item1.get_itemname()) == itemname) \
+		if ((item1.get_itemID() == itemID) && ((item1.get_itemname()) == itemname) \
 			&& (item1.get_price() == price) && (item1.get_stockState() == stockState)\
-			&& (item1.get_type() == type) )
+			&& (item1.get_type() == type))
 		{
-			
+
 			return 1;
 		}
 		else
@@ -217,7 +217,7 @@ private:
 	bool orderType;
 	float orderPrice = 0.0;
 	float totalPrice = orderPrice + 0.14 * orderPrice;
-	bool orderStatus=0;
+	bool orderStatus = 0;
 	vector <Item> itemSelectedVect;
 	int numberOfItem;
 public:
@@ -248,19 +248,18 @@ public:
 		{
 			itemSelectedVect.erase(itemSelectedVect.begin() + pos);
 		}
-
 		*/
-		
+
 		// PLEASE Return to the main function for a more detailed explanation if I was asleep , and delete this comment once you  read it
 		// msh 3yzyn nesalem el  proj keda XD
 		for (int i = 0; i < (itemSelectedVect.size()); i++)
 		{
-		
+
 			if (itemSelectedVect[i] == toBeRemovedItem)
 			{
 				itemSelectedVect.erase(itemSelectedVect.begin() + i);
 			}
-			
+
 		}
 	}
 
@@ -439,7 +438,10 @@ public:
 	Order customizedOrder;
 	Menu integratedMenu;
 	Table tablesArr;
-	
+	void RegisterOrder(Order* myOrder)
+	{
+		AllOrdersVect.push_back(myOrder);
+	}
 	void makeOrder(Item item)
 	{
 		customizedOrder.addToOrder(item);
@@ -455,9 +457,9 @@ public:
 	{
 		//this needs to be reviewed *URGENTLY*
 		bool validity = mypay.checkCardValidity(card_ID, pw_);
-		bool valid_charge = mypay.checkCharge(card_ID,myPrice,charge);
+		bool valid_charge = mypay.checkCharge(card_ID, myPrice, charge);
 	}
-	string checkPersonalOrderStatus(Order &my_order)
+	string checkPersonalOrderStatus(Order& my_order)
 	{
 		if (!(my_order.getOrderStatus()))
 		{
@@ -481,11 +483,11 @@ public:
 			}
 		}
 
-		 /*testing*/
-		/*for (int j = 0; j < availableTables.size(); j++)
-		{
-			cout << "This table is " << j << " and its no. is " << availableTables[j] + 1 << endl;
-		}*/
+		/*testing*/
+	   /*for (int j = 0; j < availableTables.size(); j++)
+	   {
+		   cout << "This table is " << j << " and its no. is " << availableTables[j] + 1 << endl;
+	   }*/
 
 
 
@@ -513,7 +515,7 @@ public:
 	{
 		return workStatus;
 	}
-	void editMenu(Item *myItem, Menu *myMenu)
+	void editMenu(Item* myItem, Menu* myMenu)
 	{
 		myMenu->addItem(myItem);
 	}
@@ -521,20 +523,20 @@ public:
 	{
 		active = 1;
 	}
-	void setOrderStatus(Order &order)
+	void setOrderStatus(Order& order)
 	{
 		order.orderStatus = 1;
 	}
-	
+
 	void checkAllOrderStatus(System MainSystemObject)
 	{
 		for (int i = 0; i < MainSystemObject.AllOrdersVect.size(); i++)
-		{	
-			cout << "Order (" << i+1 << ") contains : " <<endl;
+		{
+			cout << "Order (" << i + 1 << ") contains : " << endl;
 			Order current_order = *(MainSystemObject.AllOrdersVect[i]);
 			for (int j = 0; j < current_order.itemSelectedVect.size(); j++)
 			{
-				cout << "\t" <<current_order.itemSelectedVect[j].get_itemname() << " , Status : " << current_order.orderStatus << endl;
+				cout << "\t" << current_order.itemSelectedVect[j].get_itemname() << " , Status : " << current_order.orderStatus << endl;
 			}
 		}
 	}
@@ -558,6 +560,18 @@ private:
 	string password;
 	Admin AdminAccount;
 public:
+	string view_password()
+	{
+		return password;
+	}
+	void change_password(string newpassword)
+	{
+		password = newpassword;
+	}
+	Admin* get_Admin()
+	{
+		return &AdminAccount;
+	}
 	bool newAdminAccount(Admin myAdminAcc, string myPassword)
 	{
 		AdminAccount = myAdminAcc;
@@ -565,11 +579,12 @@ public:
 		return SUCCESS;
 	}
 
-	bool deleteAccount(int myID, string myPassword, Admin* myAdmin)
+	bool deleteAccount(int myID, string myPassword, Account* myAccAdmin)
 	{
+		
 		if (myPassword == password)
 		{
-			delete myAdmin;
+			delete myAccAdmin;
 			return SUCCESS;
 		}
 		else
@@ -580,9 +595,11 @@ public:
 
 	bool changePassword(int myID, string myOldPassword, string myNewPassword, Account* myAdmin)
 	{
-		if (myOldPassword == password)
+		if (myOldPassword == myAdmin->view_password())
 		{
-			password = myNewPassword;
+			cout << "Current Password" << myAdmin->view_password() << endl;
+			myAdmin->change_password(myNewPassword);
+			cout << "Current Password" << myAdmin->view_password()<<endl;
 			return SUCCESS;
 		}
 		else
@@ -591,19 +608,24 @@ public:
 			return FAIL;
 		}
 	}
-	void viewAccountDetails(int myID, string  myPassword, Admin* myAdmin)
+	void viewAccountDetails(int myID, string  myPassword, Account* myAdminAcc)
 	{
-		if (myAdmin->getID() == myID)
+		
+		if ((myAdminAcc->get_Admin())->getID() == myID && myAdminAcc->view_password() == myPassword )
 		{
-			cout << myAdmin->getAddress() <<endl;
-			cout << myAdmin->getAge() << endl;
-			cout << myAdmin->getCity() << endl;
-			cout << myAdmin->getID() << endl;
-			cout << myAdmin->getName() << endl;
-			cout << myAdmin->getNumber() << endl;
-			cout << myAdmin->getWorkStatus() << endl;
-			
+			cout << myAdminAcc->get_Admin()->getAddress() << endl;
+			cout << myAdminAcc->get_Admin()->getAge() << endl;
+			cout << myAdminAcc->get_Admin()->getCity() << endl;
+			cout << myAdminAcc->get_Admin()->getID() << endl;
+			cout << myAdminAcc->get_Admin()->getName() << endl;
+			cout << myAdminAcc->get_Admin()->getNumber() << endl;
+			cout << myAdminAcc->get_Admin()->getWorkStatus() << endl;
 		}
+		else
+		{
+			cout << "Wrong Cridentials Provided" << endl;
+		}
+
 	}
 
 	bool login(int myID, string myPassword, Admin* myadmin)
@@ -611,14 +633,13 @@ public:
 		myadmin->set_login();
 		return SUCCESS;
 	}
-		
+
 	bool logout(Admin* myadmin)
-	{	
+	{
 		myadmin->reset_login();
 		return SUCCESS;
 	}
 };
-
 void bankSimulation()
 {
 	/*initializing some credit card info*/
@@ -650,17 +671,23 @@ void bankSimulation()
 
 
 int main() {
-	/* My Testcase "AMR" */
-	/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
+	/*											START OF MY TEST CASE												*/
+	/* Creating a main system object to act as a link between our different objects */
 	System MainSystem;
 	Admin Dina;
 	Dina.setName("Dina");
 	Account RestaurantManager;
+	/* Creating a new Admin Account with password "Character" */
 	RestaurantManager.newAdminAccount(Dina, "character");
+	/* Requesting to view the account details */
 	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &RestaurantManager);
+	/* Changing password of that Account */
 	RestaurantManager.changePassword(Dina.getID(), "character", "new", &RestaurantManager);
-	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &RestaurantManager);//trying to access account using old password
-		//first creating a couple of items
+	/* Trying to view account details using same old password , the request will be denied */
+	RestaurantManager.viewAccountDetails(Dina.getID(), "character", &RestaurantManager);
+	/* Now trying to access with the new password */
+	RestaurantManager.viewAccountDetails(Dina.getID(), "new", &RestaurantManager);
+	/* Creating a couple of items to add to Menu */
 	Item Pepsi;
 	Pepsi.setItem(0, 5, 1, 777, "Pepsi Cola");
 	Item CheeseCake;
@@ -669,70 +696,82 @@ int main() {
 	Tea.setItem(0, 10, 1, 779, "Shay");
 	Item Pasta;
 	Pasta.setItem(1, 40, 1, 780, "Pasta Avec de sauce francaise");
-	//Adding items to the menu
+	/* Adding items to the menu */
 	Menu Main;
 	Main.addItem(&Pepsi); Main.addItem(&CheeseCake); Main.addItem(&Pasta); Main.addItem(&Tea);
-	/*for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";*/
+	/* Checking The Menu Content */
+	for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";
 	cout << endl;
-	//now removing shay from life
+	/* Removing item using ID from the Menu */
 	Main.deleteItem(779);
-	/*for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";*/
-	/*
-		Here I need a code to take a couple of orders then register them all in system in vector named  "AllOrdersVect"
-	*/
+	for (int i = 0; i < Main.MainMenu.size(); i++) cout << (Main.MainMenu[i])->get_itemname() << "  :  ";
+	cout << endl;
+	/* Taking Order From Customer */
 	Order First_order;
 	First_order.addToOrder(Pepsi, 1);
 	First_order.addToOrder(CheeseCake, 2);
+	/*Registering Order in the main system */
 	MainSystem.RegisterOrder(&First_order);
+	Order Second_order;
+	Second_order.addToOrder(Pasta, 3);
+	Second_order.addToOrder(CheeseCake, 2);
+	/*Registering Order in the main system */
+	MainSystem.RegisterOrder(&Second_order);
+	/* Now Checking the order status of each order registered on the system , this can only be done by the adming account */
+	/*						Status 0 indicates not ready , Status 1 indicates ready										  */
 	Dina.checkAllOrderStatus(MainSystem);
 
-	/*Test Case for checking order status*/
-	Order my_order;
-	bool orderStat = my_order.getOrderStatus();
-	cout << "Your order is (boolen): " << orderStat<<endl;
-	string result = james_bond.checkPersonalOrderStatus(my_order);
-	cout << result << endl << endl;
-	Dina.setOrderStatus(my_order);
-	orderStat = my_order.getOrderStatus();
-	cout << "Your order now is (boolen): " << orderStat << endl;
-	result = james_bond.checkPersonalOrderStatus(my_order);
-	cout << result <<endl;
-	cout << endl;
-
-/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
-	
-	/*This test case for check available tables*/
-	/*System dina;
-	dina.checkAvailableTables();*/
-
-	/*Item item1;
-	item1.setItem(0, 0, 0, 12, "Amr");
-	Item item2;
-	item2.setItem(0, 0, 0, 10, "Dina");
-	if (item1 == item1)
-	{
-		cout << "Succeeded";
-	}
-	else
-	{
-		cout << "Fail";
-	}*/
-	//bankSimulation(); //This only initialized one time to fill the credit card info, or you could either remove ios::app to overwrite the file
+	/*									HERE ENDS MY TEST CASE																*/		
 
 
-	/*Test case
-	Table dina;
-	bool my_result = dina.reserveTable(2);
-	cout << "your result is :" << my_result << endl;*/
+	///*Test Case for checking order status*/
+	//System james_bond;
+	//Order my_order;
+	//bool orderStat = my_order.getOrderStatus();
+	//cout << "Your order is (boolen): " << orderStat << endl;
+	//string result = james_bond.checkPersonalOrderStatus(my_order);
+	//cout << result << endl << endl;
+	//Dina.setOrderStatus(my_order);
+	//orderStat = my_order.getOrderStatus();
+	//cout << "Your order now is (boolen): " << orderStat << endl;
+	//result = james_bond.checkPersonalOrderStatus(my_order);
+	//cout << result << endl;
+	//cout << endl;
 
-	/*test case
-	Credit my_payment;
-	float price = my_payment.getPrice();
-	string card1 = "4024007141525864";
-	string pw1 = "dina";
-	bool result;
-	result = my_payment.checkCardValidity(card1, pw1);
-	cout << "My result is " << result << endl;*/
+	/* Now to users part , note  that we can't create users as it is an abstract class which cannot be objectified */
+
+		/*This test case for check available tables*/
+		/*System dina;
+		dina.checkAvailableTables();*/
+
+		/*Item item1;
+		item1.setItem(0, 0, 0, 12, "Amr");
+		Item item2;
+		item2.setItem(0, 0, 0, 10, "Dina");
+		if (item1 == item1)
+		{
+			cout << "Succeeded";
+		}
+		else
+		{
+			cout << "Fail";
+		}*/
+		//bankSimulation(); //This only initialized one time to fill the credit card info, or you could either remove ios::app to overwrite the file
+
+
+		/*Test case
+		Table dina;
+		bool my_result = dina.reserveTable(2);
+		cout << "your result is :" << my_result << endl;*/
+
+		/*test case
+		Credit my_payment;
+		float price = my_payment.getPrice();
+		string card1 = "4024007141525864";
+		string pw1 = "dina";
+		bool result;
+		result = my_payment.checkCardValidity(card1, pw1);
+		cout << "My result is " << result << endl;*/
 
 	return 0;
 }
